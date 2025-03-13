@@ -3,7 +3,15 @@ dotenv.config({ path: './.env' });
 import express from 'express';
 import path from 'path';
 import cors from 'cors';
-import mediaRouter from './routes/routes'; // an imported Express router (defined in `routes.js`) containing specific route handlers.
+import mediaRouter from './routes/routes.js'; // an imported Express router (defined in `routes.js`) containing specific route handlers.
+
+// Create __dirname equivalent in ES modules
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
+// app.use(express.urlencoded({ extended: true }));
+// // express.static should let me run js, css and img files
+// app.use(express.static(path.join(__dirname, '../src')));
 
 const app = express(); // Create an instance of an Express application
 const PORT = 3000;
@@ -12,11 +20,6 @@ const PORT = 3000;
 app.use(cors());
 // initialize middleware for handling JSON and request parsing
 app.use(express.json());
-
-// Route to our homepage / index.html
-app.get('/', (req, res) => {
-  return res.status(200).sendFile(path.resolve(__dirname, 'index.html'));
-});
 
 // Set up the path and middlewares
 /**
@@ -28,6 +31,18 @@ app.get('/', (req, res) => {
  */
 app.use('/', mediaRouter);
 
+// Route to our homepage / index.html
+app.get(
+  '/',
+  (req, res, next) => {
+    console.log('inside app.get index.html');
+    return next();
+  },
+  (req, res) => {
+    return res.status(200).sendFile(path.resolve(__dirname, 'index.html'));
+  }
+);
+
 // 404 handler
 app.use('*', (req, res) => {
   res.status(404).send('Page not found');
@@ -38,7 +53,7 @@ app.use((err, req, res, next) => {
   const defaultObj = {
     message: { err: 'An error occured' },
     status: 500,
-    log: 'Unknown error caught',
+    log: `Unknown error caught: ${err}`,
   };
   const errorObj = Object.assign({}, defaultObj, err);
   console.log(errorObj.log);

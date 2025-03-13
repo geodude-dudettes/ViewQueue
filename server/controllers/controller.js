@@ -1,4 +1,4 @@
-import db from '../models/model';
+import db from '../models/model.js';
 
 /*
  * An error helper function to ensure consistent formatting of error logs
@@ -13,7 +13,8 @@ const Controller = {};
 
 /** retrieve all the media */
 Controller.allMedia = (req, res, next) => {
-  db.query('SELECT * FROM media;')
+  const queryCommand = 'SELECT * FROM media;';
+  db.query(queryCommand)
     .then((result) => {
       res.locals.media = result.rows;
       return next();
@@ -24,6 +25,29 @@ Controller.allMedia = (req, res, next) => {
         log: `Error occurred: ${err}`,
         status: 500,
         message: { err: 'Failure to retrieve all media from database' },
+      });
+      return next(error); // passes the formatted error to the global error handler
+    });
+};
+
+Controller.searchTitles = (req, res, next) => {
+  const queryCommand = 'SELECT * FROM media WHERE title ILIKE $1;';
+  // the query is now case-insensitive (because of ILIKE)
+  const { title } = req.params;
+  const titleFull = `%${title}%`;
+  // titleFull now stores the wildcards in front and back of user's search input in case they only input a partial search, it will still return any results that contain the partial search
+
+  db.query(queryCommand, [titleFull])
+    .then((result) => {
+      res.locals.searchResults = result.rows;
+      return next();
+    })
+    .catch((err) => {
+      console.log('search string', title);
+      const error = createError({
+        log: `Error occurred: ${err}`,
+        status: 500,
+        message: { err: 'Failure to retrieve any data from database' },
       });
       return next(error); // passes the formatted error to the global error handler
     });
