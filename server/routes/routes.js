@@ -1,5 +1,5 @@
 import express from 'express';
-import controller from '../controllers/controller';
+import controller from '../controllers/controller.js';
 
 /**
  * Importing the Express Framework:
@@ -10,7 +10,7 @@ import controller from '../controllers/controller';
  */
 const router = express.Router();
 
-router.get('/', controller.allMedia, (req, res) => {
+router.get('/media', (req, res, next) => {console.log('inside router.get'); return next()}, controller.allMedia, (req, res) => {
   return res.status(200).json(res.locals.media);
 });
 
@@ -20,7 +20,7 @@ router.get('/', controller.allMedia, (req, res) => {
 // });
 
 /* Patch Requests for adding to and removing from Watch List */
-router.patch('/:id', controller.toWatch, (req, res) => {
+router.patch('/:id/', controller.toWatch, (req, res) => {
   return res.status(200).json(res.locals.addToWatch);
 });
 
@@ -28,4 +28,6 @@ router.patch('/:id', controller.notWatch, (req, res) => {
   return res.status(200).json(res.locals.removeWatch);
 });
 
-// stretch feature: adding a delete operation
+// stretch feature: adding a delete 
+
+export default router;

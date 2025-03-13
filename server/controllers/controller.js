@@ -1,4 +1,4 @@
-import db from '../models/model';
+import db from '../models/model.js';
 
 /*
  * An error helper function to ensure consistent formatting of error logs
@@ -13,7 +13,8 @@ const Controller = {};
 
 /** retrieve all the media */
 Controller.allMedia = (req, res, next) => {
-  db.query('SELECT * FROM media;')
+  const queryCommand = 'SELECT * FROM media;';
+  db.query(queryCommand)
     .then((result) => {
       res.locals.media = result.rows;
       return next();
