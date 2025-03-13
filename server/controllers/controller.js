@@ -30,6 +30,25 @@ Controller.allMedia = (req, res, next) => {
     });
 };
 
+Controller.getTitle = (req, res, next) => {
+  const queryCommand = 'SELECT * FROM media WHERE title = $1;';
+  const { title } = req.params;
+
+  db.query(queryCommand, [title])
+    .then((result) => {
+      res.locals.oneTitle = result.rows[0];
+      return next();
+    })
+    .catch((err) => {
+      const error = createError({
+        log: `Error occurred: ${err}`,
+        status: 500,
+        message: { err: 'Failure to retrieve any data from database' },
+      });
+      return next(error); // passes the formatted error to the global error handler
+    });
+};
+
 /*
  * Just in case the user wants to create data in the future :)
  * End users can hand populate the data using this method.

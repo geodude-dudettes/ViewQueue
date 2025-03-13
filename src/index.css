@@ -1,0 +1,19 @@
+body {
+  display: grid;
+  /* flex-direction: column; */
+  text-align: center;
+  background: #464d60;
+  color: #c2e2f4;
+}
+
+.movies {
+  display: grid;
+  flex-direction: row;
+  grid-template-columns: auto  auto auto auto;
+}
+
+.movie-card img {
+  height: auto;
+  width: 400px;
+  padding: 1rem;
+}

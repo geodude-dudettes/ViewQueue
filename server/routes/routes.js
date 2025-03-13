@@ -10,9 +10,15 @@ import controller from '../controllers/controller.js';
  */
 const router = express.Router();
 
+router.get('/media/:title', controller.getTitle, (req, res) => {
+  return res.status(200).json(res.locals.oneTitle);
+  });
+
 router.get('/media', (req, res, next) => {console.log('inside router.get'); return next()}, controller.allMedia, (req, res) => {
   return res.status(200).json(res.locals.media);
 });
+
+
 
 /* No need for end user to create data on their own */
 // router.post('/', controller.createMedia, (req, res) => {

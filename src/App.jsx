@@ -19,7 +19,7 @@ function App() {
 
     if (searchInput !== '') {
       console.log(searchInput);
-      fetch(databaseURL)
+      fetch(`http://localhost:3000/media?title=${searchInput}`)
         .then((response) => {
           if (response.ok) return response.json();
           else throw new Error('response contained an error');
@@ -54,7 +54,7 @@ function App() {
     // const watchList = movie.watch_list;
 
     return (
-      <div key={movie.id}>
+      <div className='movie-card' key={movie.id}>
         <img
           src={imgURL}
           onMouseOver={(e) =>
@@ -132,9 +132,7 @@ const addToWatchList = (movie) => {// filter through each movie inside watchlist
         </Button>
       </div>
 
-      {/* <Button variant='contained'>Hello World</Button> */}
-
-      <div>{movies.map(renderMovie)}</div>
+      <div className='movies'>{movies.map(renderMovie)}</div>
     </>
   );
 }
