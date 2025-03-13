@@ -30,16 +30,20 @@ Controller.allMedia = (req, res, next) => {
     });
 };
 
-Controller.getTitle = (req, res, next) => {
-  const queryCommand = 'SELECT * FROM media WHERE title = $1;';
+Controller.searchTitles = (req, res, next) => {
+  const queryCommand = 'SELECT * FROM media WHERE title ILIKE $1;';
+  // the query is now case-insensitive (because of ILIKE)
   const { title } = req.params;
+  const titleFull = `%${title}%`;
+  // titleFull now stores the wildcards in front and back of user's search input in case they only input a partial search, it will still return any results that contain the partial search
 
-  db.query(queryCommand, [title])
+  db.query(queryCommand, [titleFull])
     .then((result) => {
-      res.locals.oneTitle = result.rows[0];
+      res.locals.searchResults = result.rows;
       return next();
     })
     .catch((err) => {
+      console.log('search string', title);
       const error = createError({
         log: `Error occurred: ${err}`,
         status: 500,

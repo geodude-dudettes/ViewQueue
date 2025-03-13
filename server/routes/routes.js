@@ -10,8 +10,8 @@ import controller from '../controllers/controller.js';
  */
 const router = express.Router();
 
-router.get('/media/:title', controller.getTitle, (req, res) => {
-  return res.status(200).json(res.locals.oneTitle);
+router.get('/media/:title', controller.searchTitles, (req, res) => {
+  return res.status(200).json(res.locals.searchResults);
   });
 
 router.get('/media', (req, res, next) => {console.log('inside router.get'); return next()}, controller.allMedia, (req, res) => {

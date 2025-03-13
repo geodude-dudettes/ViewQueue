@@ -18,20 +18,20 @@ function App() {
   function handleSubmitClick() {
 
     if (searchInput !== '') {
-      console.log(searchInput);
-      fetch(`http://localhost:3000/media?title=${searchInput}`)
+      console.log('searchInput:', searchInput);
+      fetch(`http://localhost:3000/media/${encodeURIComponent(searchInput)}`)
         .then((response) => {
           if (response.ok) return response.json();
           else throw new Error('response contained an error');
           // may need to add error handling if someone misspelled something (aka if the database doesn't return anything)
         })
-        .then((selectedMovie) => { 
-          console.log(selectedMovie);       
-          if (Array.isArray(selectedMovie)) {
-            setMovies(selectedMovie);
+        .then((selectedMovies) => { 
+          console.log('movies returned:', selectedMovies);       
+          if (Array.isArray(selectedMovies)) {
+            setMovies(selectedMovies);
             setSearchInput('');
         } else {
-            setMovies([selectedMovie]);
+            setMovies([selectedMovies]);
             setSearchInput('');
         }
           // the above would mean that now ONLY the movie they searched for is showing up on the UI
