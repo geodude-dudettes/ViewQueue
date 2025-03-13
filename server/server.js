@@ -3,9 +3,9 @@ dotenv.config({ path: './.env' });
 import express from 'express';
 import path from 'path';
 import cors from 'cors';
-import mediaRouter from './routes/routes';
+import mediaRouter from './routes/routes'; // an imported Express router (defined in `routes.js`) containing specific route handlers.
 
-const app = express();
+const app = express(); // Create an instance of an Express application
 const PORT = 3000;
 
 //allow cors to allow all origins
@@ -19,6 +19,13 @@ app.get('/', (req, res) => {
 });
 
 // Set up the path and middlewares
+/**
+ * Mount the mediaRouter middleware at the root ('/') path
+ * `app.use()` is a middleware function that applies the `mediaRouter` to all incoming requests.
+ * The `/` specifies that `mediaRouter` will handle all routes starting from the root path.
+ * `mediaRouter` is an imported Express router (defined in `routes.js`) containing specific route handlers.
+ * This setup helps modularize the app by keeping route definitions separate from `server.js`.
+ */
 app.use('/', mediaRouter);
 
 // 404 handler
