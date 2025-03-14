@@ -29,11 +29,15 @@ router.get('/watchlist', controller.watchlist, (req, res) => {
 // });
 
 /* Patch Requests for adding to and removing from Watch List */
-router.patch('/:id/', controller.toWatch, (req, res) => {
+router.patch('/:id/add', controller.toWatch, (req, res) => {
   return res.status(200).json(res.locals.addToWatch);
 });
 
-router.patch('/:id', controller.notWatch, (req, res) => {
+// router.patch('/:id/remove', controller.notWatch, (req, res) => {
+//   return res.status(200).json(res.locals.removeWatch);
+// });
+
+router.patch('/watchlist/:id/', controller.notWatch, (req, res) => {
   return res.status(200).json(res.locals.removeWatch);
 });
 

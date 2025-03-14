@@ -103,6 +103,7 @@ Controller.watchlist = (req, res, next) => {
 /* adding media to watch list using UPDATE operation */
 Controller.toWatch = (req, res, next) => {
   const { id } = req.params;
+  console.log(req.params);
 
   const query = `UPDATE media SET watch_list = TRUE WHERE id = $1
 RETURNING *;`;

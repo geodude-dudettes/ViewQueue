@@ -2,12 +2,14 @@ import React from 'react';
 // import * as React from 'react'; namespace import, if using typescript and/or hooks
 
 // Implementing react router dom to refactor some of the code to navigate between App and WatchList
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes, Link, } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import { useEffect, useState, useRef } from 'react';
 // add useState if we are using it
 import WatchList from './WatchList';
+import Navbar from './NavBar'
+
 
 const databaseURL = 'http://localhost:3000/media';
 
@@ -15,6 +17,7 @@ function Home() {
   const [movies, setMovies] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const inputRef = useRef(null);
+  // const navigate = useNavigate();
 
   //fetch request to get the database entries, once per page load
   useEffect(() => {
@@ -63,7 +66,6 @@ function Home() {
     }
   }
 
-
   //render each movie using React
   function renderMovie(movie) {
     const title = movie.title;
@@ -75,6 +77,41 @@ function Home() {
     // const favorite = movie.favorite;
     // const watchList = movie.watch_list;
 
+    function updateMovie(movie) {
+      // const movieId = movie.id;
+      const updatedMovie = { watch_list: true };
+
+      fetch(`http://localhost:3000/${movie.id}/add`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedMovie),
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Failed to update the movie');
+          }
+        })
+        .then(() => {
+          // Once the movie has been added to the watchlist, update the state locally
+
+          setMovies((prevMovies) =>
+          // The .map() function is used to iterate over each movie (m) in the prevMovies array.
+          // It will return a new array, so we're not modifying the original array but creating a new one with updated values.
+            prevMovies.map((m) =>
+              // This is a ternary (conditional) operation that checks if the movie’s id matches the id of the movie clicked.
+              // { ...m } is using the spread operator to copy all the properties of the current movie (m).
+              // We then update or add the watch_list property with the value true.
+              // If the ids don’t match: We simply return the original movie (m) without modifying it.
+              m.id === movie.id ? { ...m, watch_list: true } : m
+            )
+          );
+        })
+        .catch((error) => console.error('Failed to add movie to watch list:', error));
+    }
 
     return (
       <div className='movie-card' key={movie.id}>
@@ -90,8 +127,8 @@ function Home() {
         <p>{genre}</p>
         <p>{year}</p>
         <nav>
-          <Link to='./watchList'>
-            <Button variant='contained' onClick={WatchList}>
+          <Link to='/watchlist'>
+            <Button variant='contained' onClick={() => updateMovie(movie)}>
               Add to Watch List
             </Button>
           </Link>
@@ -134,11 +171,14 @@ function Home() {
 
 function App() {
   return (
+    <>
+    <Navbar />
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/watchlist' element={<WatchList />} />
       <Route path='*' element={<h1>404 Not Found</h1>} />
     </Routes>
+    </>
   );
 }
 
