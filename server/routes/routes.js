@@ -18,7 +18,10 @@ router.get('/media', (req, res, next) => {console.log('inside router.get'); retu
   return res.status(200).json(res.locals.media);
 });
 
-
+// For the WatchList page
+router.get('/watchlist', controller.watchlist, (req, res) => {
+  return res.status(200).json(res.locals.toWatch);
+  } )
 
 /* No need for end user to create data on their own */
 // router.post('/', controller.createMedia, (req, res) => {
@@ -26,14 +29,18 @@ router.get('/media', (req, res, next) => {console.log('inside router.get'); retu
 // });
 
 /* Patch Requests for adding to and removing from Watch List */
-router.patch('/:id/', controller.toWatch, (req, res) => {
+router.patch('/:id/add', controller.toWatch, (req, res) => {
   return res.status(200).json(res.locals.addToWatch);
 });
 
-router.patch('/:id', controller.notWatch, (req, res) => {
+// router.patch('/:id/remove', controller.notWatch, (req, res) => {
+//   return res.status(200).json(res.locals.removeWatch);
+// });
+
+router.patch('/watchlist/:id/', controller.notWatch, (req, res) => {
   return res.status(200).json(res.locals.removeWatch);
 });
 
-// stretch feature: adding a delete 
+// stretch feature: adding a delete
 
 export default router;

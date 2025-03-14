@@ -78,9 +78,32 @@ Controller.searchTitles = (req, res, next) => {
  * This is the middleware design solely for adding or removing media from watch list
  */
 
+/** GET request to Watch List Media */
+Controller.watchlist = (req, res, next) => {
+  const queryCommand = `SELECT * from media
+  WHERE watch_list = TRUE;`;
+
+  db.query(queryCommand)
+  .then((result) => {
+    res.locals.toWatch = result.rows;
+    return next();
+  })
+  .catch((err) => {
+    const error = createError({
+      log: `Error occurred: ${err}`,
+      status: 500,
+      message: { err: 'Failure to retrieve watch list from database' },
+    });
+    return next(error);
+  });
+
+};
+
+
 /* adding media to watch list using UPDATE operation */
 Controller.toWatch = (req, res, next) => {
   const { id } = req.params;
+  console.log(req.params);
 
   const query = `UPDATE media SET watch_list = TRUE WHERE id = $1
 RETURNING *;`;
