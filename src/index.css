@@ -1,0 +1,56 @@
+body {
+  display: grid;
+  /* flex-direction: column; */
+  text-align: center;
+  background: #464d60;
+  color: #c2e2f4;
+}
+
+.movies {
+  display: grid;
+  flex-direction: row;
+  grid-template-columns: auto  auto auto auto;
+}
+
+.movie-card img {
+  height: auto;
+  width: 200px;
+  padding: 1rem;
+}
+
+ul{
+  text-decoration: none;
+}
+.nav-links{
+text-decoration: none;
+list-style: none;
+display: flex;
+text-align: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  background-color: rgb(0, 0, 0);
+  padding: 0.6rem;
+  border-radius: 1rem;
+  transition: 0.5s;
+}
+
+.navbar, ul{
+display:flex;
+justify-content: center;
+align-items: center;
+gap:20px;
+}
+.nav-links li{
+display: inline;
+/* padding: 1rem; */
+
+}
+.navbar .nav-links a:hover {
+  color: #464d60;
+  text-decoration: none;
+  background-color: azure;
+  transition: 0.3s;
+}
